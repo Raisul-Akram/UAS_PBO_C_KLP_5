@@ -7,8 +7,8 @@ Proyek ini disusun untuk memenuhi tugas oleh:
 2. **Keiveen Aldiandra(2408107010085)**
 3. **Cut Wynona Andromeda(2408107010097)**
 4. **Nayla Khansa Livya(2408107010098)**
-5. **Muhammad Razi Siregar(24081070100101)**
-6. **Raisul Akram(24081070100107)**
+5. **Muhammad Razi Siregar(2408107010101)**
+6. **Raisul Akram(2408107010107)**
 
 
 ## 📋 Deskripsi Proyek
