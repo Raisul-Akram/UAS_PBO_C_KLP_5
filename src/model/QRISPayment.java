@@ -6,3 +6,9 @@ public class QRISPayment implements Payment {
         System.out.println("Pembayaran QRIS berhasil.");
         return true;
     }
+
+@Override
+    public String getPaymentType() {
+        return "QRIS";
+    }
+}
