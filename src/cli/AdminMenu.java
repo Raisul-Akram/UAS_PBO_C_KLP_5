@@ -123,3 +123,29 @@ Movie movie = movieService.findById(id);
         System.out.println("Data film berhasil diperbarui.");
     }
 
+private void deleteMovie() {
+        System.out.println("\n--- Hapus Film ---");
+        System.out.print("Masukkan ID film yang akan dihapus: ");
+        String id = scanner.nextLine();
+
+        boolean success = movieService.deleteMovieById(id);
+        if (success) {
+            System.out.println("Film berhasil dihapus.");
+        } else {
+            System.out.println("Film tidak ditemukan.");
+        }
+    }
+
+    private void viewMovies() {
+        List<Movie> movies = movieService.sortMoviesByPopularity();
+        if (movies.isEmpty()) {
+            System.out.println("Belum ada data film.");
+            return;
+        }
+
+        System.out.println("\n=== Daftar Film ===");
+        for (Movie m : movies) {
+            System.out.println(m.getId() + " - " + m.getTitle() + " (" + m.getGenre() + ")");
+        }
+    }
+
