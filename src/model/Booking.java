@@ -20,3 +20,11 @@ public class Booking {
         this.seats = seats;
         this.totalPrice = totalPrice;
     }
+
+    // Getters
+    public String getBookingCode() { return bookingCode; }
+    public String getUserId() { return userId; }
+    public String getShowtimeId() { return showtimeId; }
+    public List<String> getSeats() { return seats; }
+    public double getTotalPrice() { return totalPrice; }
+}
