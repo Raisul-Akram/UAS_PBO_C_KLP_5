@@ -209,3 +209,38 @@ private void deleteMovie() {
         movieService.addShowtime(showtime);
         System.out.println("Jadwal tayang berhasil ditambahkan.");
     }
+
+// ================= FITUR USER & LAPORAN =================
+
+    private void viewUsers() {
+        // PERBAIKAN: Menggunakan List<Account> agar cocok dengan UserRepository
+        List<Account> accounts = userRepo.findAll();
+        
+        if (accounts.isEmpty()) {
+            System.out.println("Belum ada data user.");
+            return;
+        }
+
+        System.out.println("\n=== Daftar Akun Terdaftar ===");
+        for (Account acc : accounts) {
+            String role = (acc instanceof Admin) ? "[ADMIN]" : "[USER]";
+            System.out.println(role + " " + acc.getUsername());
+        }
+    }
+
+    private void viewTransactions() {
+        List<Booking> bookings = bookingRepo.findAll();
+        if (bookings.isEmpty()) {
+            System.out.println("Belum ada transaksi.");
+            return;
+        }
+
+        System.out.println("\n=== Daftar Transaksi ===");
+        for (Booking b : bookings) {
+            System.out.println(
+                    "Kode: " + b.getBookingCode() +
+                    " | User: " + b.getUserId() +
+                    " | Total: Rp " + (long)b.getTotalPrice()
+            );
+        }
+    }
