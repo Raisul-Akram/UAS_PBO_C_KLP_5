@@ -28,3 +28,11 @@ public class AdminMenu {
     private BookingRepository bookingRepo;
     private UserRepository userRepo;
     private Scanner scanner;
+
+public AdminMenu() {
+        this.movieService = new MovieService();
+        this.bookingService = new BookingService();
+        this.bookingRepo = new BookingRepository();
+        this.userRepo = new UserRepository();
+        this.scanner = new Scanner(System.in);
+    }
