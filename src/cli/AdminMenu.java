@@ -149,3 +149,63 @@ private void deleteMovie() {
         }
     }
 
+// ================= FITUR JADWAL =================
+
+    private void manageShowtimes() {
+        System.out.println("\n=== Atur Jadwal Tayang ===");
+        System.out.println("1. Lihat Jadwal");
+        System.out.println("2. Tambah Jadwal");
+        System.out.print("Pilih: ");
+
+        try {
+            int choice = Integer.parseInt(scanner.nextLine());
+            switch (choice) {
+                case 1 -> viewShowtimes();
+                case 2 -> addShowtime();
+                default -> System.out.println("Pilihan tidak valid.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Input harus angka.");
+        }
+    }
+
+    private void viewShowtimes() {
+        List<Showtime> showtimes = movieService.getAllShowtimes();
+        if (showtimes.isEmpty()) {
+            System.out.println("Belum ada jadwal tayang.");
+            return;
+        }
+
+        System.out.println("\n=== Daftar Jadwal Tayang ===");
+        for (Showtime st : showtimes) {
+            System.out.println(
+                    st.getId() + " | Movie: " + st.getMovieId() +
+                    " | " + st.getDate() + " " + st.getTime() +
+                    " | Rp " + (long)st.getPrice()
+            );
+        }
+    }
+
+    private void addShowtime() {
+        System.out.println("\n--- Tambah Jadwal ---");
+        System.out.print("ID Showtime: ");
+        String id = scanner.nextLine();
+        System.out.print("ID Film: ");
+        String movieId = scanner.nextLine();
+        System.out.print("Tanggal (yyyy-MM-dd): ");
+        String date = scanner.nextLine();
+        System.out.print("Jam (HH:mm): ");
+        String time = scanner.nextLine();
+        System.out.print("Harga per kursi: ");
+        double price;
+        try {
+            price = Double.parseDouble(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Harga tidak valid.");
+            return;
+        }
+
+        Showtime showtime = new Showtime(id, movieId, time, date, price);
+        movieService.addShowtime(showtime);
+        System.out.println("Jadwal tayang berhasil ditambahkan.");
+    }
