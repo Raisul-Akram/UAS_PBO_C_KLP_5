@@ -100,3 +100,26 @@ public void display() {
         System.out.print("Masukkan ID film yang akan diedit: ");
         String id = scanner.nextLine();
 
+Movie movie = movieService.findById(id);
+        if (movie == null) {
+            System.out.println("Film tidak ditemukan.");
+            return;
+        }
+
+        System.out.println("Data saat ini: " + movie.getTitle() + " (" + movie.getGenre() + ")");
+        System.out.print("Judul baru (Enter jika tetap): ");
+        String newTitle = scanner.nextLine();
+        if (!newTitle.isBlank()) {
+            movie.setTitle(newTitle);
+        }
+
+        System.out.print("Genre baru (Enter jika tetap): ");
+        String newGenre = scanner.nextLine();
+        if (!newGenre.isBlank()) {
+            movie.setGenre(newGenre);
+        }
+
+        movieService.updateMovie(movie);
+        System.out.println("Data film berhasil diperbarui.");
+    }
+
