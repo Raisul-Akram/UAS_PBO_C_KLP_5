@@ -19,3 +19,15 @@ public class MovieRepository {
         loadFromFile();
     }
 
+    // =====================
+    // CREATE
+    // =====================
+    public boolean save(Movie movie) {
+        if (findById(movie.getId()) != null) {
+            return false; // ID sudah ada
+        }
+        movies.add(movie);
+        saveToFile();
+        return true;
+    }
+
