@@ -80,3 +80,23 @@ public void display() {
             }
         }
     }
+
+// ================= FITUR FILM =================
+
+    private void addMovie() {
+        System.out.println("\n--- Tambah Film Baru ---");
+        System.out.print("ID Film: ");
+        String id = scanner.nextLine();
+        System.out.print("Judul: ");
+        String title = scanner.nextLine();
+        System.out.print("Genre: ");
+        String genre = scanner.nextLine();
+        movieService.addMovie(new Movie(id, title, genre));
+        System.out.println("Film berhasil ditambahkan.");
+    }
+
+    private void editMovie() {
+        System.out.println("\n--- Edit Film ---");
+        System.out.print("Masukkan ID film yang akan diedit: ");
+        String id = scanner.nextLine();
+
