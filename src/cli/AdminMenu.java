@@ -12,3 +12,12 @@ import repository.BookingRepository;
 import repository.UserRepository;
 import util.FileManager;
 import util.InvalidInputException;
+
+import java.util.List;
+import java.util.Scanner;
+
+/**
+ * Menu CLI untuk Admin.
+ * Mengelola film, jadwal tayang, user, transaksi, dan laporan.
+ * @author Kelompok 5
+ */
