@@ -21,3 +21,32 @@ public class BookingService {
         }
         bookingRepo.save(booking);
     }
+
+    /**
+     * Cek apakah kursi tersedia berdasarkan data booking yang sudah tersimpan,
+     * dibatasi per showtime.
+     */
+    private boolean isSeatsAvailable(String showtimeId, List<String> seats) {
+        List<Booking> existingBookings = bookingRepo.findAll();
+
+        // Kumpulkan kursi yang sudah dibooking untuk showtime yang sama
+        List<String> bookedSeats = new ArrayList<>();
+        for (Booking b : existingBookings) {
+            if (b.getShowtimeId().equals(showtimeId)) {
+                bookedSeats.addAll(b.getSeats());
+            }
+        }
+
+        // Cek apakah kursi yang dipilih user sudah terpakai di showtime itu
+        for (String seat : seats) {
+            if (bookedSeats.contains(seat.trim())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public List<Booking> getBookingsByUser(String userId) {
+        return bookingRepo.findByUser(userId);
+    }
+}
