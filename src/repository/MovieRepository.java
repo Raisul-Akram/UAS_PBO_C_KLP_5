@@ -31,3 +31,19 @@ public class MovieRepository {
         return true;
     }
 
+    // =====================
+    // READ
+    // =====================
+    public List<Movie> findAll() {
+        return new ArrayList<>(movies); // kembalikan copy agar aman
+    }
+
+    public Movie findById(String id) {
+        for (Movie m : movies) {
+            if (m.getId().equalsIgnoreCase(id)) {
+                return m;
+            }
+        }
+        return null;
+    }
+
