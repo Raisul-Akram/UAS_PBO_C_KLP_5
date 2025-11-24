@@ -114,10 +114,16 @@ classDiagram
     Tiket "1" --> "1" Kursi
     Tiket "1" --> "1" Pengguna
 ```
+## CARA MENJALANKAN PROGRAM
+* java -cp bin main
+### ![WhatsApp Image 2025-11-24 at 16 54 58_2fca044d](https://github.com/user-attachments/assets/9377efdc-b380-4c6d-a6f2-b3386ef484ec)
+
+
+
 ## PEMBAGIAN TUGAS KELOMPOK
-1. **Urfan : File Readme**
-2. **Keiveen Aldiandra : Source Code**
-3. **Cut Wynona Andromeda : Membuat PPT**
-4. **Nayla Khansa Livya: Membuat PPT**
-5. **Muhammad Razi Siregar: Source Code**
-6. **Raisul Akram: Source Code**
+1. **Urfan : File Readme and Source Code**
+2. **Keiveen Aldiandra : Full Source Code**
+3. **Cut Wynona Andromeda : Membuat PPT and Source Code**
+4. **Nayla Khansa Livya: Membuat PPT and Source Code**
+5. **Muhammad Razi Siregar:Full Source Code**
+6. **Raisul Akram: Full Source Code**
