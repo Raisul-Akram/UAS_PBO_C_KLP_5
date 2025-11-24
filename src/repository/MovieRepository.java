@@ -79,7 +79,7 @@ public class MovieRepository {
         return deleteById(id);
     }
 
-     // =====================
+    / =====================
     // FILE HANDLING
     // =====================
     private void loadFromFile() {
@@ -92,7 +92,18 @@ public class MovieRepository {
                 String[] parts = line.split(",");
                 if (parts.length != 3) continue;
 
-               
+                movies.add(new Movie(
+                        parts[0].trim(),
+                        parts[1].trim(),
+                        parts[2].trim()
+                ));
+            } catch (Exception ignored) {
+                // skip line rusak
+            }
+        }
+    }
+
+    
 
 
     
