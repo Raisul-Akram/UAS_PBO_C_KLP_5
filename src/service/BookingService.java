@@ -3,7 +3,6 @@ package service;
 import model.Booking;
 import repository.BookingRepository;
 import util.SeatUnavailableException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,39 +13,72 @@ public class BookingService {
         this.bookingRepo = new BookingRepository();
     }
 
+    /**
+     * Membuat booking baru.
+     */
     public void createBooking(Booking booking) throws SeatUnavailableException {
-        // Sekarang cek kursi per showtime, bukan global
+        // Cek lagi ketersediaan kursi untuk keamanan ganda
         if (!isSeatsAvailable(booking.getShowtimeId(), booking.getSeats())) {
-            throw new SeatUnavailableException("Kursi yang dipilih sudah dipesan.");
+            throw new SeatUnavailableException("Kursi yang dipilih sudah dipesan orang lain.");
         }
         bookingRepo.save(booking);
     }
 
     /**
-     * Cek apakah kursi tersedia berdasarkan data booking yang sudah tersimpan,
-     * dibatasi per showtime.
+     * Cek ketersediaan kursi (untuk Validasi Input User).
      */
-    private boolean isSeatsAvailable(String showtimeId, List<String> seats) {
-        List<Booking> existingBookings = bookingRepo.findAll();
+    public boolean isSeatsAvailable(String showtimeId, List<String> seats) {
+        List<String> bookedSeats = getBookedSeats(showtimeId); // Pakai method helper di bawah biar rapi
 
-        // Kumpulkan kursi yang sudah dibooking untuk showtime yang sama
-        List<String> bookedSeats = new ArrayList<>();
-        for (Booking b : existingBookings) {
-            if (b.getShowtimeId().equals(showtimeId)) {
-                bookedSeats.addAll(b.getSeats());
-            }
-        }
-
-        // Cek apakah kursi yang dipilih user sudah terpakai di showtime itu
         for (String seat : seats) {
-            if (bookedSeats.contains(seat.trim())) {
-                return false;
+            // Gunakan trim() dan equalsIgnoreCase() biar lebih robust
+            // Contoh: user input "a1 ", di data "A1" -> Tetap terdeteksi
+            boolean found = false;
+            for (String booked : bookedSeats) {
+                if (booked.trim().equalsIgnoreCase(seat.trim())) {
+                    found = true;
+                    break;
+                }
+            }
+            
+            if (found) {
+                return false; // Kursi sudah ada yang punya
             }
         }
-        return true;
+        return true; // Semua kursi aman
     }
 
+    /**
+     * Mengambil riwayat booking user tertentu.
+     */
     public List<Booking> getBookingsByUser(String userId) {
-        return bookingRepo.findByUser(userId);
+        List<Booking> allBookings = bookingRepo.findAll();
+        List<Booking> userBookings = new ArrayList<>();
+        
+        for (Booking b : allBookings) {
+            if (b.getUserId().equals(userId)) {
+                userBookings.add(b);
+            }
+        }
+        return userBookings;
+    }
+
+    /**
+     * METHOD BARU: Mengambil daftar semua kursi yang sudah laku untuk Showtime tertentu.
+     * Dipanggil oleh UserMenu untuk menggambar Peta Kursi (Seat Map).
+     */
+    public List<String> getBookedSeats(String showtimeId) {
+        List<Booking> existingBookings = bookingRepo.findAll();
+        List<String> bookedSeats = new ArrayList<>();
+
+        for (Booking b : existingBookings) {
+            if (b.getShowtimeId().equals(showtimeId)) {
+                // Normalisasi: Simpan semua dalam UpperCase & Trim (misal "A1")
+                for (String seat : b.getSeats()) {
+                    bookedSeats.add(seat.trim().toUpperCase());
+                }
+            }
+        }
+        return bookedSeats;
     }
 }
