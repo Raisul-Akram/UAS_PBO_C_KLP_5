@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
  */
 public class BookingRepository {
     private List<Booking> bookings = new ArrayList<>();
+    private static final String FILE_PATH = "data/bookings.txt";
 
     public BookingRepository() {
         loadFromFile();
@@ -24,7 +25,7 @@ public class BookingRepository {
     }
 
     public List<Booking> findAll() {
-        return bookings;
+        return new ArrayList<>(bookings);
     }
 
     public List<Booking> findByUser(String userId) {
@@ -34,22 +35,60 @@ public class BookingRepository {
     }
 
     private void loadFromFile() {
-        // Path file sudah diperbaiki, relatif ke folder kerja
-        List<String> lines = FileManager.getInstance().readFile("data/bookings.txt");
+        List<String> lines = FileManager.getInstance().readFile(FILE_PATH);
+        bookings.clear(); // Bersihkan list sebelum load ulang
+        
         for (String line : lines) {
-            String[] parts = line.split(",");
-            List<String> seats = List.of(parts[3].split(";")); // Asumsikan seats dipisah ";"
-            bookings.add(new Booking(parts[0], parts[1], parts[2], seats, Double.parseDouble(parts[4])));
+            // PENGAMAN 1: Lewati baris kosong
+            if (line == null || line.trim().isEmpty()) continue;
+            
+            try {
+                String[] parts = line.split(",");
+                
+                // PENGAMAN 2: Pastikan format data lengkap (minimal 5 kolom)
+                if (parts.length < 5) {
+                    System.out.println("Skip data rusak: " + line);
+                    continue; 
+                }
+
+                String bookingCode = parts[0];
+                String userId = parts[1];
+                String showtimeId = parts[2];
+                
+                // Logika pembacaan kursi yang aman (dipisah titik koma ';')
+                String seatsRaw = parts[3];
+                List<String> seats = new ArrayList<>();
+                if (!seatsRaw.isEmpty()) {
+                    String[] seatArr = seatsRaw.split(";");
+                    for (String s : seatArr) seats.add(s);
+                }
+                
+                double price = Double.parseDouble(parts[4]);
+                
+                bookings.add(new Booking(bookingCode, userId, showtimeId, seats, price));
+                
+            } catch (Exception e) {
+                // PENGAMAN 3: Tangkap error apapun per baris
+                System.out.println("Gagal load baris: " + line + " -> " + e.getMessage());
+            }
         }
     }
 
     private void saveToFile() {
         List<String> lines = new ArrayList<>();
         for (Booking b : bookings) {
+            // Pisahkan kursi dengan titik koma (;) agar tidak bentrok dengan koma pemisah kolom
             String seatsStr = String.join(";", b.getSeats());
-            lines.add(b.getBookingCode() + "," + b.getUserId() + "," + b.getShowtimeId() + "," + seatsStr + "," + b.getTotalPrice());
+            
+            String line = String.join(",", 
+                b.getBookingCode(), 
+                b.getUserId(), 
+                b.getShowtimeId(), 
+                seatsStr, 
+                String.valueOf(b.getTotalPrice())
+            );
+            lines.add(line);
         }
-        // Path file sudah diperbaiki, relatif ke folder kerja
-        FileManager.getInstance().writeFile("data/bookings.txt", lines);
+        FileManager.getInstance().writeFile(FILE_PATH, lines);
     }
 }
